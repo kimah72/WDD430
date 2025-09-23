@@ -5,7 +5,19 @@ import { Component, signal } from '@angular/core';
   templateUrl: './app.html',
   standalone: false,
   styleUrl: './app.css',
+  // styles: [`
+  //   h3 {
+  //       color: dodgerblue;
+  //   }
+  // `]
 })
 export class App {
-  name = 'Kim';
+  username = '';
+  showSecret = false;
+  log = [];
+
+  onToggleDetails() {
+    this.showSecret = !this.showSecret;
+    this.log.push(this.log.length + 1);
+  }
 }
