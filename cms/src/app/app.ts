@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'cms-root',
@@ -6,12 +6,15 @@ import { Component, signal } from '@angular/core';
   standalone: false,
   styleUrl: './app.css'
 })
-export class App {
-  selectedFeature: string = 'documents';
+export class App implements OnInit {
+  selectedFeatureEvent: string = 'documents';
 
-  switchView(feature: string) {
-    this.selectedFeature = feature;
+  switchView(selectedFeature: string) {
+    this.selectedFeatureEvent = selectedFeature;
   }
   
-  protected readonly title = signal('cms');
+  constructor() {}
+
+  ngOnInit(): void {
+  }
 }

@@ -8,7 +8,7 @@ import { Message } from '../message.model';
   styleUrl: './message-list.css'
 })
 export class MessageList implements OnInit {
-  messages: Message[] = [
+  Messages: Message[] = [
     new Message('1', 'Announcement', 'The grades for this assignment have been posted', 'Brother Jackson'),
     new Message('2', 'Question', 'When is assignment 3 due', 'Steve Johnson'),
     new Message('3', 'Meeting', 'Can I meet with you sometime. I need help with assignment 3', 'Mark Smith')
@@ -21,6 +21,6 @@ export class MessageList implements OnInit {
   }
 
   onAddMessage(message: Message) {
-    this.messages.push(message);
+    this.Messages.push(message);
   }
 }

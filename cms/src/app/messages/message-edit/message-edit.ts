@@ -11,7 +11,7 @@ export class MessageEdit implements OnInit {
   @ViewChild('subject') subjectRef: ElementRef;
   @ViewChild('msgText') msgTextRef: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();
-  currentSender: string = 'Kimberly Miner'; 
+  currentSender = 'Kimberly';
 
   constructor() {}
 
@@ -19,10 +19,17 @@ export class MessageEdit implements OnInit {
 
   }
 
-  onAddMessage() {
+  onSendMessage() {
     const subjectValue = this.subjectRef.nativeElement.value;
     const msgTextValue = this.msgTextRef.nativeElement.value;
-    const newMessage = new Message('', subjectValue, msgTextValue.nativeElement.value, this.currentSender);
+    const newMessage = new Message('0', subjectValue, msgTextValue, this.currentSender);
     this.addMessageEvent.emit(newMessage);
+    this.onClear();
   }
+
+  onClear() {
+    this.subjectRef.nativeElement.value = '';
+    this.msgTextRef.nativeElement.value = '';
+  }
+  
 }
