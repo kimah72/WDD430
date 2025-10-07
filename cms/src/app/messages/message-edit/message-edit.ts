@@ -8,7 +8,7 @@ import { Message } from '../message.model';
   styleUrl: './message-edit.css'
 })
 export class MessageEdit {
- @ViewChild('subject') subject: ElementRef;
+  @ViewChild('subject') subject: ElementRef;
   @ViewChild('msgText') msgText: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();
   currentSender: string = 'Kimberly Miner'; 
