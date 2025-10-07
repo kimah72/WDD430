@@ -2,16 +2,17 @@
   <div class="panel-heading">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="panel-title">Name</h3>
+            <h3 class="panel-title">{{contact.name}}</h3>
         </div> 
     </div>
+    <hr>
     <div class="row">   
         <div class="col-xs-12">
             <img 
-                [src]="" 
-                [alt]="" 
+                [src]="contact.imageUrl" 
+                [alt]="contact.name" 
                 class="img-responsive" 
-                style="max-height: 50px;">
+                style="max-height: 150px;">
         </div>
     </div>
     <div class="row">
@@ -24,7 +25,7 @@
     </div>
   </div>
   <div class="panel-body">
-    <p><strong>Email:</strong></p>
-    <p><strong>Phone:</strong></p>
+    <p><strong>Email:</strong> {{contact.email}}</p>
+    <p><strong>Phone:</strong> {{contact.phone}}</p>
   </div>
 </div>

@@ -1,0 +1,22 @@
+.messageHeader {
+    background-color: azure;
+    border: solid thin black;
+    border-radius: 10px;
+    padding: 0.4rem;
+    font-size: 1.5rem;
+}
+.messageText {
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: .25rem;
+    margin-left: 1rem;
+    font-size: 1.5rem;
+}
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+.pad-left-right {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

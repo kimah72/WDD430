@@ -9,7 +9,7 @@ import { RecipeDetail } from './recipes/recipe-detail/recipe-detail';
 import { RecipeItem } from './recipes/recipe-list/recipe-item/recipe-item';
 import { ShoppingList } from './shopping-list/shopping-list';
 import { ShoppingEdit } from './shopping-list/shopping-edit/shopping-edit';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,8 @@ import { ShoppingEdit } from './shopping-list/shopping-edit/shopping-edit';
     ShoppingEdit
   ],
   imports: [
-    BrowserModule
+    BrowserModule, 
+    FormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

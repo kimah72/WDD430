@@ -7,5 +7,10 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('recipe-app');
+  // protected readonly title = signal('recipe-app');
+  loadedFeature = ('recipe');
+
+  onNavigate(feature: string) {    
+    this.loadedFeature = feature;
+  }
 }
