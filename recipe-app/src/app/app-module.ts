@@ -10,22 +10,24 @@ import { RecipeItem } from './recipes/recipe-list/recipe-item/recipe-item';
 import { ShoppingList } from './shopping-list/shopping-list';
 import { ShoppingEdit } from './shopping-list/shopping-edit/shopping-edit';
 import { FormsModule } from '@angular/forms';
+import { DropdownDirective } from './shared/dropdown.directive';
 
 @NgModule({
-  declarations: [
-    App,
-    Header,
-    Recipes,
-    RecipeList,
-    RecipeDetail,
-    RecipeItem,
-    ShoppingList,
-    ShoppingEdit
-  ],
-  imports: [
-    BrowserModule, 
-    FormsModule
-  ],
+declarations: [
+  App,
+  Header,
+  Recipes,
+  RecipeList,
+  RecipeDetail,
+  RecipeItem,
+  ShoppingList,
+  ShoppingEdit,
+  DropdownDirective
+],
+imports: [
+  BrowserModule,
+  FormsModule
+],
   providers: [
     provideBrowserGlobalErrorListeners()
   ],
