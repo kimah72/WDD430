@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-5">
-        <!-- binded the events -->
-        <cms-contact-list (selectedContactEvent)="selectedContact = $event"></cms-contact-list>
+        <!-- now relies on the service event -->
+        <cms-contact-list></cms-contact-list>
     </div>
     <div class="col-md-4">
         <cms-contact-detail [contact]="selectedContact" *ngIf="selectedContact"></cms-contact-detail>
