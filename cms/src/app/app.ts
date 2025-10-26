@@ -7,12 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
-  selectedFeatureEvent: string = 'documents';
-
-  switchView(selectedFeature: string) {
-    this.selectedFeatureEvent = selectedFeature;
-  }
-  
+    
   constructor() {}
 
   ngOnInit(): void {

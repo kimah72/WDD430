@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 
@@ -8,16 +10,26 @@ import { ContactService } from '../contact.service';
   templateUrl: './contact-list.html',
   styleUrl: './contact-list.css'
 })
+
 export class ContactList implements OnInit {
-  contacts: Contact[] = [];
+  contacts: Contact[] = []
 
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private router: Router,
+    private route: ActivatedRoute
+ ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.contactService.contactChangedEvent.subscribe(
+      (contacts: Contact[]) => {
+        this.contacts = contacts;
+      }
+    );
     this.contacts = this.contactService.getContacts();
   }
 
-  onSelected(contact: Contact) {
-    this.contactService.contactSelectedEvent.emit(contact);
+  onAddContact() {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 }

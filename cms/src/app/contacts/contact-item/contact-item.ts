@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Contact } from '../contact.model';
-
 
 @Component({
   selector: 'cms-contact-item',
@@ -8,8 +7,11 @@ import { Contact } from '../contact.model';
   templateUrl: './contact-item.html',
   styleUrl: './contact-item.css'
 })
-
-// added input property
-export class ContactItem {
+export class ContactItem implements OnInit {
   @Input() contact: Contact;
+
+  constructor() {}
+
+  ngOnInit() {   
+  }
 }
