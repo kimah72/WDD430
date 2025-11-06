@@ -1,4 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
+
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 
@@ -9,9 +11,23 @@ export class DocumentService {
   documents: Document[] = [];
   documentSelectedEvent = new EventEmitter<Document>();
   documentChangedEvent = new EventEmitter<Document[]>();
+  documentListChangedEvent = new Subject<Document[]>();
+  maxDocumentId: number;
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
+    this.maxDocumentId = this.getMaxId();
+  }
+
+  getMaxId(): number {
+  let maxId = 0;
+  for (let document of this.documents) {
+    const currentId = parseInt(document.id);
+    if (currentId > maxId) {
+      maxId = currentId;
+    }
+  }
+    return maxId;
   }
 
   getDocuments(): Document[] {
@@ -26,6 +42,17 @@ export class DocumentService {
     }
     return null;
   }
+
+  addDocument(newDocument: Document) {
+    if (!newDocument) return;
+
+    this.maxDocumentId++;
+    newDocument.id = this.maxDocumentId.toString();
+    this.documents.push(newDocument);
+    const documentListClone = this.documents.slice();
+    this.documentChangedEvent.next;
+  }
+
   deleteDocument(document: Document) {
     if (!document) return;
     const pos = this.documents.indexOf(document);
