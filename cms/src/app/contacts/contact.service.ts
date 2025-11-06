@@ -9,10 +9,6 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
 export class ContactService {
   contacts: Contact[] = [];
 
-  // Optional – safe to keep
-  contactSelectedEvent = new EventEmitter<Contact>();
-  contactChangedEvent = new EventEmitter<Contact[]>();
-
   // NEW – live list updates
   contactListChangedEvent = new Subject<Contact[]>();
 
