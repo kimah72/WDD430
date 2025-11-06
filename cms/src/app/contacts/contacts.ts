@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Contact } from './contact.model';
-import { ContactService } from './contact.service';
 
 @Component({
   selector: 'cms-contacts',
@@ -8,10 +6,9 @@ import { ContactService } from './contact.service';
   templateUrl: './contacts.html',
   styleUrl: './contacts.css'
 })
-export class Contacts {
-  selectedContact: Contact | null = null;
+export class Contacts implements OnInit {
 
-  constructor(private contactService: ContactService) {}
+  constructor() { }
 
   ngOnInit(): void {
   }
