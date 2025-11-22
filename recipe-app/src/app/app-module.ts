@@ -1,6 +1,7 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { App } from './app';
 import { Header } from './header/header';
@@ -35,6 +36,8 @@ imports: [
   BrowserModule,
   FormsModule,
   ReactiveFormsModule,
+  // deprecated in Angular 14 and later
+  HttpClientModule,
   AppRoutingModule
 ],
   providers: [

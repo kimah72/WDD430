@@ -13,8 +13,13 @@ import { ContactService } from '../contact.service';
 })
 
 export class ContactList implements OnInit, OnDestroy {
+  term: string = '';
   contacts: Contact[] = [];
   subscription: Subscription;
+
+  search(value: string) {
+    this.term = value;
+  }
 
   constructor(
     private contactService: ContactService,

@@ -1,81 +1,79 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
 import { Document } from './document.model';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class DocumentService {
   documents: Document[] = [];
-
-  // ONLY ONE OBSERVABLE — LIVE LIST UPDATES
   documentListChangedEvent = new Subject<Document[]>();
-
-  // For unique IDs
   maxDocumentId: number;
 
-  constructor() {
-    this.documents = MOCKDOCUMENTS;
-    this.maxDocumentId = this.getMaxId();
+  private url = 'https://cms-school-project-default-rtdb.firebaseio.com/documents.json';
+
+  constructor(private http: HttpClient) {
+    this.fetchDocuments();
   }
 
-  // === GET DATA ===
+  fetchDocuments() {
+    this.http.get<Document[]>(this.url).subscribe({
+      next: (documents) => {
+        this.documents = documents || [];
+        this.maxDocumentId = this.getMaxId();
+        this.sortDocuments();
+        this.documentListChangedEvent.next(this.documents.slice());
+      },
+      error: (err) => console.error('GET Documents failed', err)
+    });
+  }
+
+  storeDocuments() {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    this.http.put(this.url, this.documents, { headers }).subscribe({
+      next: () => this.documentListChangedEvent.next(this.documents.slice()),
+      error: (err) => console.error('PUT Documents failed', err)
+    });
+  }
+
   getDocuments(): Document[] {
     return this.documents.slice();
   }
 
-  getDocument(id: string): Document {
-    for (let document of this.documents) {
-      if (document.id === id) {
-        return document;
-      }
-    }
-    return null;
+  getDocument(id: string): Document | null {
+    return this.documents.find(d => d.id === id) || null;
   }
 
   getMaxId(): number {
-    let maxId = 0;
-    for (let document of this.documents) {
-      const currentId = parseInt(document.id);
-      if (currentId > maxId) {
-        maxId = currentId;
-      }
-    }
-    return maxId;
+    return this.documents.reduce((max, d) => Math.max(max, +d.id || 0), 0);
   }
 
-  addDocument(newDocument: Document) {
-    if (!newDocument) return;
+  sortDocuments() {
+    this.documents.sort((a, b) => a.name.localeCompare(b.name));
+  }
 
+  addDocument(newDoc: Document) {
+    if (!newDoc) return;
     this.maxDocumentId++;
-    newDocument.id = this.maxDocumentId.toString();
-    this.documents.push(newDocument);
-    const clone = this.documents.slice();
-    this.documentListChangedEvent.next(clone);
+    newDoc.id = this.maxDocumentId.toString();
+    this.documents.push(newDoc);
+    this.storeDocuments();
   }
 
   updateDocument(original: Document, updated: Document) {
     if (!original || !updated) return;
-
     const pos = this.documents.indexOf(original);
     if (pos < 0) return;
-
     updated.id = original.id;
     this.documents[pos] = updated;
-    const clone = this.documents.slice();
-    this.documentListChangedEvent.next(clone);
+    this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
     if (!document) return;
-
     const pos = this.documents.indexOf(document);
     if (pos < 0) return;
-
     this.documents.splice(pos, 1);
-    const clone = this.documents.slice();
-    this.documentListChangedEvent.next(clone);
+    this.storeDocuments();
   }
 }
