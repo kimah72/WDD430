@@ -1,0 +1,29 @@
+// src/custom-theme.scss – Material 2 Compatibility Theme for Angular 20/Material 20 (Nov 2025)
+// This uses the official M2 legacy API so Academind tutorials work without changes
+
+@use '@angular/material' as mat;
+
+// Include core styles (required for legacy mode)
+@include mat.core();
+
+// Define palettes using M2 compatibility functions (fixes "undefined function")
+$course-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$course-accent:  mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+
+// Create the light theme (M2 style)
+$course-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $course-primary,
+    accent: $course-accent,
+  )
+));
+
+// Apply to all components (M2 style)
+@include mat.all-component-themes($course-theme);
+
+// Basic resets (same as before)
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
