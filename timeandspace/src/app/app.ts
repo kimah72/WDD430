@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Entry } from './posts/entry-list/entry-list';
+import { Entry } from './entries/entry-list/entry-list';
 
 @Component({
   selector: 'app-root',
