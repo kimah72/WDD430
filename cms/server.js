@@ -1,24 +1,16 @@
-var express = require('express');
-var path = require('path');
-var http = require('http');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const mongoose = require('mongoose');
 
-var index = require('./server/routes/app');
-var documents = require('./server/routes/documents');
-var messages = require('./server/routes/messages');
-var contacts = require('./server/routes/contacts');
+const documents = require('./server/routes/documents');
+const messages = require('./server/routes/messages');
+const contacts = require('./server/routes/contacts');
 
-var app = express();
+const app = express();
 
-// Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// CORS
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -26,24 +18,22 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'dist/cms/browser')));
+app.use(express.static(path.join(__dirname, 'dist/cms')));
 
-// Routes
-app.use('/', index);
 app.use('/documents', documents);
 app.use('/messages', messages);
 app.use('/contacts', contacts);
 
-// I had to change this to fix my routing issue
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
 });
 
-const port = process.env.PORT || '3000';
-app.set('port', port);
+mongoose.connect('mongodb://127.0.0.1:27017/cms', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-const server = http.createServer(app);
-
-server.listen(port, () => {
-  console.log('API running on localhost:' + port);
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
 });

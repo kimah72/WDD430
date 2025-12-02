@@ -1,39 +1,26 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Contact } from './contact.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ContactService {
   contacts: Contact[] = [];
-  private url = 'https://cms-school-project-default-rtdb.firebaseio.com/contacts.json';
-
   contactListChangedEvent = new Subject<Contact[]>();
-  maxContactId: number = 0;
+
+  private apiUrl = 'http://localhost:3000/contacts';
 
   constructor(private http: HttpClient) {
-    this.loadContacts();
+    this.fetchContacts();
   }
 
-  // Load from Firebase once at startup
-  loadContacts() {
-    this.http.get<Contact[]>(this.url).subscribe({
+  fetchContacts() {
+    this.http.get<Contact[]>(this.apiUrl).subscribe({
       next: (contacts) => {
-        this.contacts = contacts || [];
-        this.maxContactId = this.getMaxId();
+        this.contacts = contacts;
         this.contactListChangedEvent.next(this.contacts.slice());
       },
-      error: (err) => console.error('Failed to load contacts', err)
-    });
-  }
-
-  // Save to Firebase
-  saveContacts() {
-    this.http.put(this.url, this.contacts).subscribe({
-      next: () => this.contactListChangedEvent.next(this.contacts.slice()),
-      error: (err) => console.error('Failed to save contacts', err)
+      error: (err) => console.error('Error loading contacts:', err)
     });
   }
 
@@ -45,37 +32,39 @@ export class ContactService {
     return this.contacts.find(c => c.id === id) || null;
   }
 
-  getMaxId(): number {
-    let max = 0;
-    for (let c of this.contacts) {
-      const curr = parseInt(c.id || '0');
-      if (curr > max) max = curr;
-    }
-    return max;
+  addContact(contact: Contact) {
+    if (!contact) return;
+
+    this.http.post<Contact>(this.apiUrl, contact).subscribe({
+      next: (newContact) => {
+        this.contacts.push(newContact);
+        this.contactListChangedEvent.next(this.contacts.slice());
+      }
+    });
   }
 
-  addContact(newContact: Contact) {
-    if (!newContact) return;
-    this.maxContactId++;
-    newContact.id = this.maxContactId.toString();
-    this.contacts.push(newContact);
-    this.saveContacts();          // ← Firebase save
-  }
+  updateContact(original: Contact, newContact: Contact) {
+    if (!original || !newContact) return;
 
-  updateContact(original: Contact, updated: Contact) {
-    if (!original || !updated) return;
-    const pos = this.contacts.indexOf(original);
+    const pos = this.contacts.findIndex(c => c.id === original.id);
     if (pos < 0) return;
-    updated.id = original.id;
-    this.contacts[pos] = updated;
-    this.saveContacts();          // ← Firebase save
+
+    this.http.put(`${this.apiUrl}/${original.id}`, newContact).subscribe({
+      next: () => {
+        this.contacts[pos] = newContact;
+        this.contactListChangedEvent.next(this.contacts.slice());
+      }
+    });
   }
 
   deleteContact(contact: Contact) {
     if (!contact) return;
-    const pos = this.contacts.indexOf(contact);
-    if (pos < 0) return;
-    this.contacts.splice(pos, 1);
-    this.saveContacts();          // ← Firebase save
+
+    this.http.delete(`${this.apiUrl}/${contact.id}`).subscribe({
+      next: () => {
+        this.contacts = this.contacts.filter(c => c.id !== contact.id);
+        this.contactListChangedEvent.next(this.contacts.slice());
+      }
+    });
   }
 }

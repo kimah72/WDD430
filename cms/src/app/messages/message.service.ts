@@ -1,31 +1,26 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
 import { Message } from './message.model';
-import { ContactService } from '../contacts/contact.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class MessageService {
   messages: Message[] = [];
-  messageChangedEvent = new EventEmitter<Message[]>();
-  maxMessageId: number = 0;
+  messageChangedEvent = new Subject<Message[]>();
 
-  private firebaseUrl = 'https://cms-school-project-default-rtdb.firebaseio.com/messages.json';
+  private apiUrl = 'http://localhost:3000/messages';
 
-  constructor(private http: HttpClient, private contactService: ContactService) {
-    this.initMessages();
+  constructor(private http: HttpClient) {
+    this.fetchMessages();
   }
 
-  // Called once in constructor
-  initMessages() {
-    this.http.get<Message[]>(this.firebaseUrl).subscribe({
+  fetchMessages() {
+    this.http.get<Message[]>(this.apiUrl).subscribe({
       next: (messages) => {
-        this.messages = messages || [];
-        this.maxMessageId = this.getMaxId();
-        this.messageChangedEvent.emit(this.messages.slice());
+        this.messages = messages;
+        this.messageChangedEvent.next(this.messages.slice());
       },
-      error: (err) => console.error('Failed to load messages', err)
+      error: (err) => console.error('Error loading messages:', err)
     });
   }
 
@@ -37,35 +32,14 @@ export class MessageService {
     return this.messages.find(m => m.id === id) || null;
   }
 
-  getMaxId(): number {
-    let max = 0;
-    for (let m of this.messages) {
-      const currId = parseInt(m.id);
-      if (currId > max) max = currId;
-    }
-    return max;
-  }
-
   addMessage(message: Message) {
     if (!message) return;
 
-    this.maxMessageId++;
-    message.id = this.maxMessageId.toString();
-
-    if (message.sender && isNaN(+message.sender)) {
-    // It's a name, not an ID — find the contact and get their ID
-    const contact = this.contactService.getContacts().find(c => c.name === message.sender);
-    if (contact) {
-      message.sender = contact.id;
-    }
-  }
-
-    this.messages.push(message);
-
-    // Save to Firebase + notify everyone
-    this.http.put(this.firebaseUrl, this.messages).subscribe({
-      next: () => this.messageChangedEvent.emit(this.messages.slice()),
-      error: (err) => console.error('Failed to save message', err)
+    this.http.post<Message>(this.apiUrl, message).subscribe({
+      next: (newMessage) => {
+        this.messages.push(newMessage);
+        this.messageChangedEvent.next(this.messages.slice());
+      }
     });
   }
 }

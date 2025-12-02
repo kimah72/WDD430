@@ -1,0 +1,5 @@
+<app-header></app-header>
+<main>
+<app-entry-create (entryCreated)="onEntryAdded($event)"></app-entry-create>
+<app-entry-list [entries]="storedEntries"></app-entry-list>
+</main>

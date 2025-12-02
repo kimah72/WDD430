@@ -1,0 +1,9 @@
+<mat-accordion multi="true" *ngIf="entries.length > 0">
+  <mat-expansion-panel *ngFor="let entry of entries">
+    <mat-expansion-panel-header>
+      {{ entry.title }}
+    </mat-expansion-panel-header>
+    <p>{{ entry.content }}</p>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info text mat-body-1" *ngIf="entries.length <= 0">No entries have been added.</p>

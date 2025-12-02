@@ -6,7 +6,7 @@ import { DocumentEdit } from './documents/document-edit/document-edit';
 import { MessageList } from './messages/message-list/message-list';
 import { Contacts } from './contacts/contacts';
 import { ContactDetail } from './contacts/contact-detail/contact-detail';
-import { ContactEdit } from './contacts/contact-edit/contact-edit';  // ← OK to import even if file doesn't exist yet
+import { ContactEdit } from './contacts/contact-edit/contact-edit';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/documents', pathMatch: 'full' },
