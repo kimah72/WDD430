@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+// outputting a list of entries
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-export interface Entry {
-  title: string;
-  content: string;
-}
+import { Entry } from '../entry.model';
+import { EntriesService } from '../entries.service';
 
 @Component({
   selector: 'app-entry-list',
@@ -11,11 +11,23 @@ export interface Entry {
   templateUrl: './entry-list.html',
   styleUrls: ['./entry-list.css'],
 })
-export class EntryList {
-  // posts = [
-  //   { title: 'First Post', content: "This is the first post's content" },
-  //   { title: 'Second Post', content: "This is the second post's content" },
-  //   { title: 'Third Post', content: "This is the third post's content" },
-  // ];
-  @Input() entries: Entry[] = []; 
+export class EntryList implements OnInit, OnDestroy{
+  entries: Entry[] = []; 
+  private entriesSub: Subscription = new Subscription();
+
+  constructor(public entryService: EntriesService) {}
+  // basic initialization methods
+  ngOnInit() {
+    this.entries = this.entryService.getEntries();
+    this.entriesSub = this.entryService.getEntriesUpdateListener()
+    // receives updated entries when emitted
+      .subscribe((entries: Entry[]) => {
+        this.entries = entries;
+      });
+  }
+
+  ngOnDestroy() {
+    // prevents memory leaks
+    this.entriesSub.unsubscribe();
+  }
 }

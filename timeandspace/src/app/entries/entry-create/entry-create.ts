@@ -1,4 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+// create new entry component
+import { Component} from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+import { EntriesService } from '../entries.service';
 
 @Component({
   selector: 'app-entry-create',
@@ -10,13 +14,13 @@ export class EntryCreate {
   enteredTitle = '';
   enteredContent = '';
 
-  @Output() entryCreated = new EventEmitter();
+  constructor(private entriesService: EntriesService) {}
 
-  onAddEntry() {
-    const entry = {
-      title: this.enteredTitle,
-      content: this.enteredContent,
-    };
-    this.entryCreated.emit(entry);
+  onAddEntry(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    this.entriesService.addEntry(form.value.title, form.value.content);
+    form.resetForm();
   }
 }
