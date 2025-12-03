@@ -22,7 +22,7 @@ html {
   // Main colors
   --mat-sys-primary:          #5d5fefff;   // electric indigo
   --mat-sys-tertiary:         #00e5ffff;   // neon cyan
-  --mat-sys-error:            #ff1744ff;   // bright red-orange → changed to tomato below
+  --mat-sys-error:            tomato;   // bright red-orange → changed to tomato below
   --mat-sys-on-error:         #ffffff;
 
   // Backgrounds that feel like space
@@ -93,3 +93,13 @@ button[mat-mini-fab] {
 [color="primary"]   { --mat-sys-primary: #8c9effff; }
 [color="tertiary"]  { --mat-sys-primary: #00e5ffff; }
 [color="warn"]      { --mat-sys-primary: tomato; }
+
+.space-text {
+  color: #e0e7ff !important;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.8px;
+  line-height: 1.6;
+}
+
+.space-text.text-lg { font-size: 1.25rem; font-weight: 600; }
+.space-text.text-sm { font-size: 0.875rem; opacity: 0.9; }
