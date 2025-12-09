@@ -15,9 +15,9 @@ export class MessageService {
   }
 
   fetchMessages() {
-    this.http.get<Message[]>(this.apiUrl).subscribe({
-      next: (messages) => {
-        this.messages = messages;
+    this.http.get<{messages: Message[]}>(this.apiUrl).subscribe({
+      next: (response) => {
+        this.messages = response.messages;
         this.messageChangedEvent.next(this.messages.slice());
       },
       error: (err) => console.error('Error loading messages:', err)
@@ -32,14 +32,16 @@ export class MessageService {
     return this.messages.find(m => m.id === id) || null;
   }
 
-  addMessage(message: Message) {
-    if (!message) return;
+addMessage(message: Message) {
+  if (!message) return;
 
-    this.http.post<Message>(this.apiUrl, message).subscribe({
-      next: (newMessage) => {
-        this.messages.push(newMessage);
-        this.messageChangedEvent.next(this.messages.slice());
-      }
-    });
-  }
+  // Send the message (sender is just the name right now)
+  this.http.post<Message>(this.apiUrl, message).subscribe({
+    next: (newMessage) => {
+      this.messages.push(newMessage);
+      this.messageChangedEvent.next(this.messages.slice());
+    },
+    error: (err) => console.error('Save failed', err)
+  });
+}
 }

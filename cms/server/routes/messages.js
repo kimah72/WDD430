@@ -2,54 +2,40 @@ const express = require('express');
 const router = express.Router();
 const sequenceGenerator = require('./sequenceGenerator');
 const Message = require('../models/message');
+const Contact = require('../models/contact');
 
 router.get('/', (req, res) => {
   Message.find()
     .populate('sender')
-    .then(messages => {
-      res.status(200).json(messages);
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Error fetching messages', error: err });
-    });
-});
-
-router.post('/', (req, res) => {
-  const maxId = sequenceGenerator.nextId("messages");
-
-  const message = new Message({
-    id: maxId.toString(),
-    subject: req.body.subject,
-    msgText: req.body.msgText,
-    sender: req.body.sender
-  });
-
-  message.save()
-    .then(created => {
-      Message.populate(created, { path: 'sender' })
-        .then(populated => res.status(201).json(populated));
-    })
+    .then(messages => res.status(200).json({ messages }))  // ← { messages: ... }
     .catch(err => res.status(500).json({ error: err }));
 });
 
-router.put('/:id', (req, res) => {
-  Message.findOne({ id: req.params.id })
-    .then(msg => {
-      msg.subject = req.body.subject;
-      msg.msgText = req.body.msgText;
-      msg.sender = req.body.sender;
+router.post('/', async (req, res) => {
+  try {
+    const maxMessageId = sequenceGenerator.nextId("messages");
 
-      Message.updateOne({ id: req.params.id }, msg)
-        .then(() => res.status(204).json())
-        .catch(err => res.status(500).json(err));
-    })
-    .catch(() => res.status(404).json({ message: 'Message not found' }));
-});
+    let senderId = req.body.sender;
 
-router.delete('/:id', (req, res) => {
-  Message.deleteOne({ id: req.params.id })
-    .then(() => res.status(204).json())
-    .catch(err => res.status(500).json(err));
+    // Convert name to real ObjectId
+    if (senderId && typeof senderId === 'string' && isNaN(senderId)) {
+      const contact = await Contact.findOne({ name: senderId });
+      senderId = contact ? contact._id : null;
+    }
+
+    const message = new Message({
+      id: maxMessageId.toString(),
+      subject: req.body.subject,
+      msgText: req.body.msgText,
+      sender: senderId
+    });
+
+    const created = await message.save();
+    const populated = await Message.populate(created, { path: 'sender' });
+    res.status(201).json(populated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
