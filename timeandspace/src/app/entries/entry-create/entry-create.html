@@ -21,7 +21,7 @@
       required
       placeholder="Entry Content"
       #content="ngModel"></textarea>
-    <mat-error ngIf="content.invalid">Please create an entry</mat-error>
+    <mat-error *ngIf="content.invalid">Please create an entry</mat-error>
   </mat-form-field>
   <button 
     mat-raised-button 

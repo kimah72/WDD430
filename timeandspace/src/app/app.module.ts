@@ -1,30 +1,42 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
+import { MatFormFieldModule } from '@angular/material/form-field'; // I have this and the original doesn't
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
+
 import { App } from './app';
-import { Header } from './header/header';
 import { EntryCreate } from './entries/entry-create/entry-create';
+import { Header } from './header/header';
 import { EntryList } from './entries/entry-list/entry-list';
-import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
-  declarations: [App, EntryCreate, Header, EntryList],
+  declarations: [
+    App, 
+    EntryCreate, 
+    Header, 
+    EntryList],
   imports: [
     BrowserModule,
     FormsModule,
-    MatFormFieldModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule, // I have this and the original doesn't
     MatInputModule,
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
-    HttpClientModule
+    HttpClientModule,
+    CommonModule
   ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

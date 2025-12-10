@@ -17,6 +17,8 @@ html {
   ));
 }
 
+@include mat.all-component-themes(());
+
 // THE FUN PART -- CUSTOM STYLES FOR "TIME AND SPACE" THEME
 :root {
   // Main colors
