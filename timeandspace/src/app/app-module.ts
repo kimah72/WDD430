@@ -9,8 +9,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { App } from './app';
 import { Header } from './header/header';
-import { EntryCreate } from './posts/entry-create/entry-create';
-import { EntryList } from './posts/entry-list/entry-list';
+import { EntryCreate } from './entries/entry-create/entry-create';
+import { EntryList } from './entries/entry-list/entry-list';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [App, EntryCreate, Header, EntryList],
@@ -23,6 +24,7 @@ import { EntryList } from './posts/entry-list/entry-list';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    HttpClientModule
   ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

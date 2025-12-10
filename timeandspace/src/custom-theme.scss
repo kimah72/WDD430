@@ -1,12 +1,9 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
-
-// Include core styles
 @include mat.core();
 
 html {
@@ -20,19 +17,71 @@ html {
   ));
 }
 
+// THE FUN PART -- CUSTOM STYLES FOR "TIME AND SPACE" THEME
+:root {
+  // Main colors
+  --mat-sys-primary:          #5d5fefff;   // electric indigo
+  --mat-sys-tertiary:         #00e5ffff;   // neon cyan
+  --mat-sys-error:            tomato;      // tomato red for warn/danger
+  --mat-sys-on-error:         #ffffff;
+
+  // Backgrounds that feel like space
+  --mat-sys-surface:          #0a0e17;
+  --mat-sys-surface-variant:  #141824;
+  --mat-sys-surface-container-lowest: #0a0e17;
+
+  // Glow effect on hover/focus
+  --mat-sys-state-hover-state-layer-opacity: 0.12;
+  --mat-sys-state-focus-state-layer-opacity: 0.24;
+
+  // FINAL TEXT FIX – forces ALL text to be bright and readable
+  --mat-sys-on-surface:         #e0e7ff !important;
+  --mat-sys-on-surface-variant: #b0c4ff !important;
+}
+
+// Dark mode = default (because space is dark)
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: dark;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
+  background: linear-gradient(135deg, #0a0e17 0%, #141824 100%);
+  background-attachment: fixed;
+  color: #e0e7ff;
   margin: 0;
+  min-height: 100vh;
+  font-family: "Rajdhani", sans-serif !important;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+
+/* Use Orbitron only for titles */
+mat-card-title,
+h1, h2, h3, h4 {
+  font-family: 'Orbitron', sans-serif !important;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #00e5ffff;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+// Buttons glow
+button[mat-raised-button],
+button[mat-fab],
+button[mat-mini-fab] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 229, 255, 0.3);
+  }
+}
+
+// Primary = electric indigo, Tertiary = cyan, Warn = tomato red
+[color="primary"]   { --mat-sys-primary: #8c9effff; }
+[color="tertiary"]  { --mat-sys-primary: #00e5ffff; }
+[color="warn"]      { --mat-sys-primary: tomato; }
+
+// Clean readable text — no more fighting Material
+.space-text {
+  color: #e0e7ff !important;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.8px;
+  line-height: 1.6;
 }
