@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';   // ← CHANGE TO BehaviorSubject
 
 import { Entry } from './entry.model';
 
 @Injectable({ providedIn: 'root' })
 export class EntryService {
   private entries: Entry[] = [];
-  private entriesUpdated = new Subject<Entry[]>();
+  private entriesUpdated = new BehaviorSubject<Entry[]>([]);  // ← REPLAYS LAST VALUE
 
   constructor(private http: HttpClient) {}
 
   getEntries() {
-    this.http.get<{ message: string; entries: Entry[] }>(
-        "http://localhost:3000/api/entries"
-    )
-      .subscribe((entryData) => {
-        this.entries = entryData.entries;
-        this.entriesUpdated.next([...this.entries]);
+    this.http
+      .get<{ message: string; entries: Entry[] }>("http://localhost:3000/api/entries")
+      .subscribe({
+        next: (entryData) => {
+          this.entries = entryData.entries;
+          this.entriesUpdated.next([...this.entries]);
+        },
+        error: () => {
+          this.entries = [];
+          this.entriesUpdated.next([]);
+        }
       });
   }
 

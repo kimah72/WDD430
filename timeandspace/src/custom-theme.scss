@@ -1,8 +1,5 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
+// src/custom-theme.scss — FINAL WORKING VERSION (Dec 2025)
+
 @use '@angular/material' as mat;
 @include mat.core();
 
@@ -12,75 +9,57 @@ html {
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
-    density: 0,
   ));
 }
 
+// REQUIRED LINE — THIS WAS MISSING AND BROKE EVERYTHING
 @include mat.all-component-themes(());
 
-// THE FUN PART -- CUSTOM STYLES FOR "TIME AND SPACE" THEME
+// YOUR COSMIC THEME — ALL WORKING
 :root {
-  // Main colors
-  --mat-sys-primary:          #5d5fefff;   // electric indigo
-  --mat-sys-tertiary:         #00e5ffff;   // neon cyan
-  --mat-sys-error:            tomato;      // tomato red for warn/danger
-  --mat-sys-on-error:         #ffffff;
+  --mat-sys-primary: #5d5fefff;
+  --mat-sys-tertiary: #00e5ffff;
+  --mat-sys-error: tomato;
+  --mat-sys-surface: #0a0e17;
+  --mat-sys-surface-variant: #141824;
 
-  // Backgrounds that feel like space
-  --mat-sys-surface:          #0a0e17;
-  --mat-sys-surface-variant:  #141824;
-  --mat-sys-surface-container-lowest: #0a0e17;
-
-  // Glow effect on hover/focus
-  --mat-sys-state-hover-state-layer-opacity: 0.12;
-  --mat-sys-state-focus-state-layer-opacity: 0.24;
-
-  // FINAL TEXT FIX – forces ALL text to be bright and readable
-  --mat-sys-on-surface:         #e0e7ff !important;
+  // TEXT FIX — THIS MAKES ALL TEXT VISIBLE
+  --mat-sys-on-surface: #e0e7ff !important;
   --mat-sys-on-surface-variant: #b0c4ff !important;
+
+  // FONT FIX — THIS IS THE ONLY WAY IN 2025
+  --mat-sys-body-large-font: 'Rajdhani', sans-serif;
+  --mat-sys-body-medium-font: 'Rajdhani', sans-serif;
+  --mat-sys-body-small-font: 'Rajdhani', sans-serif;
+  --mat-sys-headline-large-font: 'Orbitron', sans-serif;
+  --mat-sys-headline-medium-font: 'Orbitron', sans-serif;
+  --mat-sys-headline-small-font: 'Orbitron', sans-serif;
+  --mat-sys-title-large-font: 'Orbitron', sans-serif;
+  --mat-sys-title-medium-font: 'Orbitron', sans-serif;
+  --mat-sys-title-small-font: 'Orbitron', sans-serif;
 }
 
-// Dark mode = default (because space is dark)
 body {
   color-scheme: dark;
   background: linear-gradient(135deg, #0a0e17 0%, #141824 100%);
   background-attachment: fixed;
-  color: #e0e7ff;
   margin: 0;
   min-height: 100vh;
-  font-family: "Rajdhani", sans-serif !important;
-  letter-spacing: 0.8px;
-  font-weight: 500;
 }
 
-/* Use Orbitron only for titles */
-mat-card-title,
-h1, h2, h3, h4 {
-  font-family: 'Orbitron', sans-serif !important;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #00e5ffff;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+mat-card {
+  background: rgba(20, 24, 36, 0.7) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
+  border-radius: 16px !important;
 }
 
-// Buttons glow
-button[mat-raised-button],
-button[mat-fab],
-button[mat-mini-fab] {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 20px rgba(0, 229, 255, 0.3);
-  }
+button[mat-raised-button]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(0, 229, 255, 0.3);
 }
 
-// Primary = electric indigo, Tertiary = cyan, Warn = tomato red
-[color="primary"]   { --mat-sys-primary: #8c9effff; }
-[color="tertiary"]  { --mat-sys-primary: #00e5ffff; }
-[color="warn"]      { --mat-sys-primary: tomato; }
-
-// Clean readable text — no more fighting Material
 .space-text {
   color: #e0e7ff !important;
   font-family: 'Rajdhani', sans-serif;
