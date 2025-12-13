@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';   // ← CHANGE TO BehaviorSubject
+import { Subject } from 'rxjs';
 
 import { Entry } from './entry.model';
 
 @Injectable({ providedIn: 'root' })
 export class EntryService {
   private entries: Entry[] = [];
-  private entriesUpdated = new BehaviorSubject<Entry[]>([]);  // ← REPLAYS LAST VALUE
+  private entriesUpdated = new Subject<Entry[]>(); 
 
   constructor(private http: HttpClient) {}
 

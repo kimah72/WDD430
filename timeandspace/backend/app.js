@@ -1,6 +1,9 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 // a big chain of middleware, like a funnel which we send this express and every part can do something with the request.
 const app = express();
+
+app.use(bodyParser.json());
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -11,27 +14,21 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, entry, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, DELETE, OPTIONS"
   );
   next();
 });
 
-// middleware
-// app.use((req, res, next) => {
-//     console.log('First middleware');
-//     next();
-// });
-
-// this is where we are sending the request - we will see json data
-app.use("/api/entries", (req, res, next) => {
+app.post("/api/entries", express.json(), (req, res, next) => {
     const entry = req.body;
-  console.log(entry);
-  res.status(201).json({
-    message: 'entry added successfully'
-  });
+    console.log(entry);
+    res.status(201).json({
+        message: 'entry added successfully'
+    });
 });
 
 app.get("/api/entries", (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} /api/entries requested`);
   const entries = [
     {
       id: "fadf12421l",
@@ -41,9 +38,12 @@ app.get("/api/entries", (req, res, next) => {
     {
       id: "ksajflaj132",
       title: "Second server-side entry",
-      content: "This is coming from the server!"
+      content: "This is also coming from the server!"
     }
   ];
+
+  console.log("Sending entries:", entries);
+
   res.status(200).json({
     message: "Entries fetched successfully!",
     entries: entries

@@ -1,4 +1,4 @@
-// src/custom-theme.scss — FINAL WORKING VERSION (Dec 2025)
+// src/custom-theme.scss
 
 @use '@angular/material' as mat;
 @include mat.core();
@@ -15,7 +15,7 @@ html {
 // REQUIRED LINE — THIS WAS MISSING AND BROKE EVERYTHING
 @include mat.all-component-themes(());
 
-// YOUR COSMIC THEME — ALL WORKING
+// COSMIC THEME — ALL WORKING
 :root {
   --mat-sys-primary: #5d5fefff;
   --mat-sys-tertiary: #00e5ffff;
@@ -23,11 +23,11 @@ html {
   --mat-sys-surface: #0a0e17;
   --mat-sys-surface-variant: #141824;
 
-  // TEXT FIX — THIS MAKES ALL TEXT VISIBLE
-  --mat-sys-on-surface: #e0e7ff !important;
-  --mat-sys-on-surface-variant: #b0c4ff !important;
+  // TEXT FIX — THIS MAKES ALL TEXT VISIBLE (had to make custom properties)
+  --mat-sys-on-surface: #e0e7ff;
+  --mat-sys-on-surface-variant: #b0c4ff;
 
-  // FONT FIX — THIS IS THE ONLY WAY IN 2025
+  // FONT FIX
   --mat-sys-body-large-font: 'Rajdhani', sans-serif;
   --mat-sys-body-medium-font: 'Rajdhani', sans-serif;
   --mat-sys-body-small-font: 'Rajdhani', sans-serif;
@@ -48,11 +48,11 @@ body {
 }
 
 mat-card {
-  background: rgba(20, 24, 36, 0.7) !important;
+  background: rgba(20, 24, 36, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 229, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
-  border-radius: 16px !important;
+  border-radius: 16px;
 }
 
 button[mat-raised-button]:hover {
@@ -61,7 +61,7 @@ button[mat-raised-button]:hover {
 }
 
 .space-text {
-  color: #e0e7ff !important;
+  color: #e0e7ff;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 0.8px;
   line-height: 1.6;
