@@ -3,7 +3,36 @@ textarea {
     width: 100%;
 }
 
+mat-spinner {
+  margin: auto;
+  display: block;
+}
+
 mat-raised-button,
 button {
   width: 125px;
+}
+
+mat-card form {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+mat-card button[mat-raised-button][type="submit"] {
+  align-self: center;
+  min-width: 220px; 
+  padding: 14px 40px;
+  font-size: 1.1rem;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #00e5ffff, #5d5fefff) !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
+  animation: pulse-glow 3s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-glow {
+  from { box-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+  to { box-shadow: 0 0 40px rgba(0, 229, 255, 0.8); }
 }

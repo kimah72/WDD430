@@ -1,4 +1,4 @@
-// src/custom-theme.scss
+// src/custom-theme.scss – TIME & SPACE CYBERPUNK DREAM UPGRADE (Dec 2025)
 
 @use '@angular/material' as mat;
 @include mat.core();
@@ -12,57 +12,144 @@ html {
   ));
 }
 
-// REQUIRED LINE — THIS WAS MISSING AND BROKE EVERYTHING
 @include mat.all-component-themes(());
 
-// COSMIC THEME — ALL WORKING
+// CYBERPUNK OVERRIDES — FULL NEON DREAM MODE
 :root {
-  --mat-sys-primary: #5d5fefff;
-  --mat-sys-tertiary: #00e5ffff;
-  --mat-sys-error: tomato;
-  --mat-sys-surface: #0a0e17;
-  --mat-sys-surface-variant: #141824;
+  --mat-sys-primary: #00ffff;     // pure cyan neon primary
+  --mat-sys-tertiary: #ff00ff;    // magenta neon accent
+  --mat-sys-error: #ff0066;       // hot pink/red danger
+  --mat-sys-surface: #0d001a;     // deeper void black-purple
+  --mat-sys-surface-variant: #1a0033;
 
-  // TEXT FIX — THIS MAKES ALL TEXT VISIBLE (had to make custom properties)
-  --mat-sys-on-surface: #e0e7ff;
-  --mat-sys-on-surface-variant: #b0c4ff;
-
-  // FONT FIX
-  --mat-sys-body-large-font: 'Rajdhani', sans-serif;
-  --mat-sys-body-medium-font: 'Rajdhani', sans-serif;
-  --mat-sys-body-small-font: 'Rajdhani', sans-serif;
-  --mat-sys-headline-large-font: 'Orbitron', sans-serif;
-  --mat-sys-headline-medium-font: 'Orbitron', sans-serif;
-  --mat-sys-headline-small-font: 'Orbitron', sans-serif;
-  --mat-sys-title-large-font: 'Orbitron', sans-serif;
-  --mat-sys-title-medium-font: 'Orbitron', sans-serif;
-  --mat-sys-title-small-font: 'Orbitron', sans-serif;
+  --mat-sys-on-surface: #e0ffff !important;
+  --mat-sys-on-surface-variant: #a0ffff !important;
 }
 
+// Dark cyberpunk city background (rainy neon streets feel)
 body {
   color-scheme: dark;
-  background: linear-gradient(135deg, #0a0e17 0%, #141824 100%);
-  background-attachment: fixed;
+  background: 
+    linear-gradient(rgba(13, 0, 26, 0.8), rgba(13, 0, 26, 0.8)),
+    url('https://images.stockcake.com/public/d/0/2/d0254079-6ad6-49cb-920b-31cfeaaea875_large/neon-rain-city-stockcake.jpg') center/cover fixed;  // rainy cyberpunk city
   margin: 0;
   min-height: 100vh;
+  font-family: "Rajdhani", sans-serif !important;
 }
 
+// Holographic glass cards with scan lines
 mat-card {
-  background: rgba(20, 24, 36, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 229, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.15);
-  border-radius: 16px;
+  background: rgba(13, 0, 26, 0.6) !important;
+  backdrop-filter: blur(20px) brightness(1.2);
+  border: 1px solid #00ffff !important;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-button[mat-raised-button]:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 20px rgba(0, 229, 255, 0.3);
+// Scan line overlay (classic cyberpunk effect)
+mat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,255,255,0.05), rgba(0,255,255,0.05) 1px, transparent 1px, transparent 2px);
+  pointer-events: none;
+  animation: scan 8s linear infinite;
 }
 
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+// Neon glow on buttons + hover pulse
+button[mat-raised-button],
+button[mat-button] {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 0 15px currentColor;
+  transition: all 0.3s ease;
+}
+
+button[mat-raised-button]:hover,
+button[mat-button]:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 0 40px currentColor;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 15px currentColor; }
+  50% { box-shadow: 0 0 30px currentColor; }
+  100% { box-shadow: 0 0 15px currentColor; }
+}
+
+// clean text class
 .space-text {
-  color: #e0e7ff;
+  color: #e0ffff !important;
   font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 0.8px;
+  letter-spacing: 1px;
   line-height: 1.6;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+}
+
+/* CYBERPUNK GLITCH TEXT ON HOVER — subtle but intense */
+.glitch-hover {
+  position: relative;
+  color: #e0e7ff;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  &::before {
+    color: #00e5ffff;  // cyan layer
+    left: 2px;
+    text-shadow: -2px 0 #ff00ff;  // magenta shadow
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-2px, -2px);
+  }
+  
+  &::after {
+    color: #ff00ff;    // magenta layer
+    left: -2px;
+    text-shadow: 2px 0 #00e5ffff;
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+  }
+  
+  &:hover::before,
+  &:hover::after {
+    opacity: 1;
+    animation: glitch-anim 0.8s infinite;
+  }
+  
+  &:hover {
+    animation: glitch-text 0.6s infinite;
+  }
+}
+
+@keyframes glitch-anim {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 2px); }
+}
+
+@keyframes glitch-text {
+  0%, 100% { text-shadow: 0 0 10px #00e5ffff; }
+  50% { text-shadow: 0 0 20px #ff00ff, 0 0 30px #00e5ffff; }
 }

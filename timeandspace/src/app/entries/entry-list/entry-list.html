@@ -1,13 +1,14 @@
-<mat-accordion multi="true" *ngIf="entries.length > 0">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="entries.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let entry of entries">
     <mat-expansion-panel-header>
       {{ entry.title }}
     </mat-expansion-panel-header>
     <p>{{ entry.content }}</p>
       <mat-action-row>
-        <button mat-button color="primary">EDIT</button>
-        <button mat-button color="warn">DELETE</button>
+        <a mat-button color="primary" class="glitch-hover" [routerLink]="['/edit', entry.id]" data-text="EDIT">EDIT</a>
+        <button mat-button color="warn" (click)="onDelete(entry.id)">DELETE</button>
       </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<p class="info text space-text" *ngIf="entries.length <= 0">No entries have been added.</p>
+<p class="info text space-text" *ngIf="entries.length <= 0 && !isLoading">No entries have been added.</p>

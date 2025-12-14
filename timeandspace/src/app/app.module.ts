@@ -12,11 +12,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { App } from './app';
 import { EntryCreate } from './entries/entry-create/entry-create';
 import { Header } from './header/header';
 import { EntryList } from './entries/entry-list/entry-list';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -27,6 +29,7 @@ import { EntryList } from './entries/entry-list/entry-list';
     EntryList],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule, // I have this and the original doesn't
@@ -35,8 +38,9 @@ import { EntryList } from './entries/entry-list/entry-list';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     HttpClientModule,
-    CommonModule
+    CommonModule    
   ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

@@ -12,6 +12,7 @@ import { EntryService } from '../entry.service';
 })
 export class EntryList implements OnInit, OnDestroy {
   entries: Entry[] = [];
+  isLoading = false;
   private entrySub!: Subscription;
 
   constructor(public entryService: EntryService,
@@ -19,13 +20,20 @@ export class EntryList implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.entryService.getEntries();
     this.entrySub = this.entryService.getEntryUpdateListener()
       .subscribe((entries: Entry[]) => {
+        this.isLoading = false;
         this.entries = entries;
         this.cd.detectChanges();
       });
 }
+
+  onDelete(entryId: string) {
+    this.entryService.deleteEntry(entryId);
+    console.log("Delete button clicked for ID:", entryId);
+  }
 
   ngOnDestroy() {
     this.entrySub.unsubscribe();

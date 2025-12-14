@@ -1,5 +1,11 @@
+<div class="app-wrapper">
 <app-header></app-header>
 <main>
-<app-entry-create></app-entry-create>
-<app-entry-list></app-entry-list>
+    <router-outlet></router-outlet>
 </main>
+<footer class="cyber-footer">
+  <p class="space-text">
+    © {{ currentYear }} Kimberly Miner — Time & Space Personal Blog
+  </p>
+</footer>
+</div>

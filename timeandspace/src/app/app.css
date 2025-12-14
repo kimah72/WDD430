@@ -2,4 +2,50 @@ main {
     margin-top: 1rem;
     width: 80%;
     margin: auto;
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+/* CYBERPUNK FOOTER — subtle but glowing */
+.cyber-footer {
+  padding: 30px 20px;
+  text-align: center;
+  background: rgba(13, 0, 26, 0.9);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+  margin-top: auto;
+}
+
+.cyber-footer .space-text {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  color: #00ffff;
+  text-shadow: 
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 30px #00ffff,
+    0 0 40px #00e5ff,
+    0 0 60px #00e5ff;
+  animation: footer-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes footer-glow {
+  from {
+    text-shadow: 
+      0 0 5px #00ffff,
+      0 0 10px #00ffff,
+      0 0 15px #00ffff,
+      0 0 20px #00ffff;
+  }
+  to {
+    text-shadow: 
+      0 0 10px #00ffff,
+      0 0 20px #00ffff,
+      0 0 30px #00ffff,
+      0 0 40px #00ffff,
+      0 0 60px #00e5ff,
+      0 0 80px #00e5ff;
+  }
 }
