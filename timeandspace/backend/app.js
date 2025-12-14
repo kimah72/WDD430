@@ -7,7 +7,7 @@ const entriesRoutes = require('./routes/entries');
 // a big chain of middleware, like a funnel which we send this express and every part can do something with the request.
 const app = express();
 
-mongoose.connect("mongodb+srv://kimah:ItdBfW8WqEhkM6SH@cluster0.huzsxja.mongodb.net/timeandspace?retryWrites=true&w=majority")
+
   .then(() => {
     console.log("Connected to database!")
   })
