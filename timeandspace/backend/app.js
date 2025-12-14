@@ -1,10 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
 const entriesRoutes = require('./routes/entries');
 
-// a big chain of middleware, like a funnel which we send this express and every part can do something with the request.
+// a big chain of middleware, like a funnel which we send express and every part can do something with the request.
 const app = express();
 
 app.use(bodyParser.json());
