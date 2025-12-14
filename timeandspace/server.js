@@ -1,6 +1,21 @@
+require('dotenv').config();
+const mongoose = require("mongoose");
 const app = require("./backend/app");
 const debug = require("debug")("node-angular");
 const http = require("http");
+
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER}:${
+    process.env.MONGO_PASSWORD
+  }@cluster0.huzsxja.mongodb.net/${
+    process.env.MONGO_DB
+  }?retryWrites=true&w=majority`)
+    .then(() => {
+      console.log("Connected to database!")
+    })
+    .catch(() => {
+      console.log("Connection failed!");
+    });
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -44,6 +59,11 @@ const onListening = () => {
   const bind = typeof port === "string" ? "pipe " + port : "port " + port;
   debug("Listening on " + bind);
 };
+
+// app.js — connection string stays the same
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.huzsxja.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+)
 
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
