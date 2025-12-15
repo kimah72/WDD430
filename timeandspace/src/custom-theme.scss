@@ -153,3 +153,65 @@ button[mat-button]:hover {
   0%, 100% { text-shadow: 0 0 10px #00e5ffff; }
   50% { text-shadow: 0 0 20px #ff00ff, 0 0 30px #00e5ffff; }
 }
+
+/* TRUE FALLING DIGITAL RAIN — Matrix-style cyan code rain */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 40%,
+      rgba(0, 255, 255, 0.05) 45%,
+      rgba(0, 255, 255, 0.15) 50%,
+      rgba(0, 255, 255, 0.05) 55%,
+      transparent 60%,
+      transparent 100%
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(0, 255, 255, 0.03) 65%,
+      rgba(0, 255, 255, 0.1) 70%,
+      transparent 75%,
+      transparent 100%
+    );
+  background-size: 100% 100px, 100% 150px;  // two layers for depth
+  background-position: 0 0, 0 0;
+  animation: falling-rain 20s linear infinite;
+  opacity: 0.5;
+  z-index: -1;
+  mix-blend-mode: screen;
+}
+
+@keyframes falling-rain {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 0 100px, 0 150px; }
+}
+
+@keyframes digital-rain {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+/* NEON GLOW ON ACTIVE ENTRY */
+.mat-expansion-panel.mat-expanded {
+  border: 2px solid #00e5ffff !important;
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.6) !important;
+  background: rgba(20, 24, 36, 0.9) !important;
+  transition: all 0.4s ease;
+}
+
+/* Extra glow on header when open */
+.mat-expansion-panel-header.mat-expanded {
+  background: linear-gradient(to right, transparent, rgba(0, 229, 255, 0.1)) !important;
+}
+
+/* CUSTOM NEON CURSOR */
+body, * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="none" stroke="%2300e5ff" stroke-width="4"/><circle cx="16" cy="16" r="12" fill="none" stroke="%2300e5ff" stroke-width="2" opacity="0.6"/></svg>') 16 16, auto !important;
+}

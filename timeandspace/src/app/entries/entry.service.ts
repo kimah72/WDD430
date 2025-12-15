@@ -24,6 +24,7 @@ export class EntryService {
             id: entry._id,
             title: entry.title,
             content: entry.content,
+            imagePath: entry.imagePath
           };
         });
       }))
@@ -38,37 +39,69 @@ export class EntryService {
   }
 
   getEntry(id: string) {
-    return this.http.get<{_id: string, title: string, content: string}>("http://localhost:3000/api/entries/" + id);
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string}>(
+      "http://localhost:3000/api/entries/" + id
+    );
   }
 
-  addEntry(title: string, content: string) {
-    const entry: Entry = { id: "", title: title, content: content };
-    this.http
-      .post<{ message: string, entryId: string }>(
-        'http://localhost:3000/api/entries', 
-        entry
-      )
-      .subscribe(responseData => {
-        const id = responseData.entryId;
-        entry.id = id;
-        this.entries.push(entry);
-        this.entriesUpdated.next([...this.entries]);
-        this.router.navigate(['/']);
-      });
+addEntry(title: string, content: string, image: File | string) {
+  const entryData = new FormData();
+  entryData.append("title", title);
+  entryData.append("content", content);
+
+  // ONLY append image if it's an actual File (not string or null)
+  if (image && typeof image === 'object') {
+    entryData.append("image", image, (image as File).name);
   }
 
-  updateEntry(id: string, title: string, content: string) {
-    const entry: Entry = { id: id, title: title, content: content };
-    this.http.put('http://localhost:3000/api/entries/' + id, entry)
+  this.http
+    .post<{ message: string; entry: Entry }>('http://localhost:3000/api/entries', entryData)
+    .subscribe(responseData => {
+      const entry: Entry = {
+        id: responseData.entry.id,
+        title: title,
+        content: content,
+        imagePath: responseData.entry.imagePath
+      };
+      this.entries.push(entry);
+      this.entriesUpdated.next([...this.entries]);
+      this.router.navigate(['/']);
+    });
+}
+
+updateEntry(id: string, title: string, content: string, image: File | string) {
+  let entryData: Entry | FormData;
+  if (typeof image === 'object') {
+    entryData = new FormData();
+    entryData.append("id", id);
+    entryData.append("title", title);
+    entryData.append("content", content);
+    entryData.append("image", image, title);
+  } else {
+    entryData = {
+      id: id,
+      title: title,
+      content: content,
+      imagePath: image
+    };
+  }
+  this.http
+    .put('http://localhost:3000/api/entries/' + id, entryData)
       .subscribe(response => {
         const updatedEntries = [...this.entries];
-        const oldEntryIndex = updatedEntries.findIndex(e => e.id === entry.id);
+        const oldEntryIndex = updatedEntries.findIndex(e => e.id === id);
+        const entry: Entry = {
+          id: id,
+          title: title,
+          content: content,
+          imagePath: ""
+        };
         updatedEntries[oldEntryIndex] = entry;
         this.entries = updatedEntries;
         this.entriesUpdated.next([...this.entries]);
         this.router.navigate(['/']);
-      });
-  }
+    });
+}
 
   deleteEntry(entryId: string) {
     this.http.delete('http://localhost:3000/api/entries/' + entryId)

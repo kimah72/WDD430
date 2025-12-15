@@ -5,16 +5,12 @@ const debug = require("debug")("node-angular");
 const http = require("http");
 
 mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_USER}:${
-    process.env.MONGO_PASSWORD
-  }@cluster0.huzsxja.mongodb.net/${
-    process.env.MONGO_DB
-  }?retryWrites=true&w=majority`)
+  `mongodb+srv://${process.env.MONGO_USER}:${ process.env.MONGO_PASSWORD }@cluster0.huzsxja.mongodb.net/${ process.env.MONGO_DB }?retryWrites=true&w=majority`)
     .then(() => {
-      console.log("Connected to database!")
+      console.log("Mongoose has connected to database!")
     })
     .catch(() => {
-      console.log("Connection failed!");
+      console.log("Mongoose connection failed!");
     });
 
 const normalizePort = val => {
@@ -61,9 +57,6 @@ const onListening = () => {
 };
 
 // app.js — connection string stays the same
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.huzsxja.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
-)
 
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);

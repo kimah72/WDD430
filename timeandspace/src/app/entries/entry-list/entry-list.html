@@ -4,6 +4,9 @@
     <mat-expansion-panel-header>
       {{ entry.title }}
     </mat-expansion-panel-header>
+    <div class="entry-image">
+      <img [src]="entry.imagePath" [alt]="entry.title">
+    </div>
     <p>{{ entry.content }}</p>
       <mat-action-row>
         <a mat-button color="primary" class="glitch-hover" [routerLink]="['/edit', entry.id]" data-text="EDIT">EDIT</a>

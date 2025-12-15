@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { EntryService } from "../entry.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Entry } from "../entry.model";
+import { mimeType } from "./mime-type.validator";
 
 @Component({
   selector: "app-entry-create",
@@ -16,24 +17,50 @@ export class EntryCreate implements OnInit {
   enteredContent = "";
   entry: Entry | undefined;
   isLoading = false;
+  form!: FormGroup;
+  imagePreview!: string;
   private mode = "create";
   private entryId!: string;
   
 
-constructor(public entriesService: EntryService, public route: ActivatedRoute,
-            private cd: ChangeDetectorRef
+constructor(
+  public entriesService: EntryService, public route: ActivatedRoute,
+  private cd: ChangeDetectorRef
 ) {}
 
   ngOnInit() {
+    this.form = new FormGroup({
+      // added a reactive form
+      title: new FormControl(null, { validators: [Validators.required, Validators.minLength(3)] }),
+      content: new FormControl(null, { validators: [Validators.required]}),
+      image: new FormControl(null, { 
+        // I don't always want to require an image
+        // validators: [Validators.required], 
+        asyncValidators: [mimeType]
+      })
+    });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("entryId")) {
         // Fetch and populate entry data for editing if needed
         this.mode = "edit";
         this.entryId = paramMap.get("entryId")!;
         this.isLoading = true;
-        this.entriesService.getEntry(this.entryId).subscribe(entryData => {
+
+        this.entriesService.getEntry(
+          this.entryId).subscribe(entryData => {
           this.isLoading = false;
-          this.entry = {id: entryData._id, title: entryData.title, content: entryData.content,};
+          this.entry = {
+            id: entryData._id, 
+            title: entryData.title, 
+            content: entryData.content,
+            imagePath: entryData.imagePath
+          };
+            this.form.setValue({
+            title: this.entry.title,
+            content: this.entry.content,
+            image: this.entry.imagePath
+          });
+          this.imagePreview = this.entry.imagePath;
           this.cd.detectChanges();
         });
       } else {
@@ -43,21 +70,38 @@ constructor(public entriesService: EntryService, public route: ActivatedRoute,
       }
     });
   }
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files![0];
+    // allows you to control a single value in the form
+    this.form.patchValue({ image: file });
+    this.form.get("image")?.updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+      this.cd.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
 
-  onSaveEntry(form: NgForm) {
-    if (form.invalid) {
+  onSaveEntry() {
+    if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === "create") {
-    this.entriesService.addEntry(form.value.title, form.value.content);
+      this.entriesService.addEntry(
+        this.form.value.title, 
+        this.form.value.content, 
+        this.form.value.image
+      );
     } else {
       this.entriesService.updateEntry(
         this.entryId, 
-        form.value.title, 
-        form.value.content
+        this.form.value.title, 
+        this.form.value.content,
+        this.form.value.image
       );
     }
-    form.resetForm();
+    this.form.reset();
   }
 }
