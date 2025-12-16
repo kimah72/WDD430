@@ -5,7 +5,10 @@
       {{ entry.title }}
     </mat-expansion-panel-header>
     <div class="entry-image">
-      <img [src]="entry.imagePath" [alt]="entry.title">
+      <img 
+        [src]="entry.imagePath || 'assets/images/no-image.png'" 
+        [alt]="entry.title || 'No image'"
+        class="preview-img">
     </div>
     <p>{{ entry.content }}</p>
       <mat-action-row>
@@ -14,4 +17,6 @@
       </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
+<mat-paginator [length]="totalEntries" [pageSize]="entryPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+  *ngIf="entries.length > 0"></mat-paginator>
 <p class="info text space-text" *ngIf="entries.length <= 0 && !isLoading">No entries have been added.</p>

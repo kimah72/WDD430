@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
@@ -13,12 +13,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { App } from './app';
 import { EntryCreate } from './entries/entry-create/entry-create';
 import { Header } from './header/header';
 import { EntryList } from './entries/entry-list/entry-list';
 import { AppRoutingModule } from './app-routing.module';
+import { Login } from './auth/login/login';
+import { Signup } from './auth/signup/signup';
 
 
 @NgModule({
@@ -26,11 +29,16 @@ import { AppRoutingModule } from './app-routing.module';
     App, 
     EntryCreate, 
     Header, 
-    EntryList],
+    EntryList,
+    Login,
+    Signup
+  ],
+    
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule, // I have this and the original doesn't
     MatInputModule,
@@ -39,8 +47,10 @@ import { AppRoutingModule } from './app-routing.module';
     MatToolbarModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
     HttpClientModule,
-    CommonModule    
+    CommonModule,
+  
   ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

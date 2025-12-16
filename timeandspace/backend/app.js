@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const entriesRoutes = require('./routes/entries');
+const userRoutes = require('./routes/user');
+
+// added mongoose connection in server.js instead of app.js
 
 // a big chain of middleware, like a funnel which we send express and every part can do something with the request.
 const app = express();
@@ -26,5 +29,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/entries", entriesRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;

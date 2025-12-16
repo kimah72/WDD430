@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Entry } from '../entry.model';
 import { EntryService } from '../entry.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-entry-list',
@@ -13,6 +14,10 @@ import { EntryService } from '../entry.service';
 export class EntryList implements OnInit, OnDestroy {
   entries: Entry[] = [];
   isLoading = false;
+  totalEntries = 0;
+  entryPerPage = 5;
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10];
   private entrySub!: Subscription;
 
   constructor(public entryService: EntryService,
@@ -21,18 +26,28 @@ export class EntryList implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-    this.entryService.getEntries();
+    this.entryService.getEntries(this.entryPerPage, this.currentPage);
     this.entrySub = this.entryService.getEntryUpdateListener()
-      .subscribe((entries: Entry[]) => {
+      .subscribe((entryData: {entry: Entry[], entryCount: number}) => {
         this.isLoading = false;
-        this.entries = entries;
+        this.totalEntries = entryData.entryCount;
+        this.entries = entryData.entry;
         this.cd.detectChanges();
       });
-}
+  }
+
+  onChangedPage(pageData: PageEvent) {
+    this.isLoading = true;
+    this.currentPage = pageData.pageIndex + 1;
+    this.entryPerPage = pageData.pageSize;
+    this.entryService.getEntries(this.entryPerPage, this.currentPage);
+  }
 
   onDelete(entryId: string) {
-    this.entryService.deleteEntry(entryId);
-    console.log("Delete button clicked for ID:", entryId);
+    this.isLoading = true;
+    this.entryService.deleteEntry(entryId).subscribe(() => {
+      this.entryService.getEntries(this.entryPerPage, this.currentPage);
+    });
   }
 
   ngOnDestroy() {

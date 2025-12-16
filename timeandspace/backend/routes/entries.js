@@ -79,13 +79,29 @@ router.put("/:id", multer({ storage: storage }).single("image"), (req, res, next
 });
 
 router.get("", (req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} /api/entries requested`);
-  Entry.find().then(documents => {
-    res.status(200).json({
-    message: "Entries fetched successfully!",
-    entries: documents
-  });
-  });
+    // pagination parameters
+    const pageSize= +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const entryQuery = Entry.find();
+    let fetchedEntries;
+    if (pageSize && currentPage) {
+        entryQuery
+        .skip(pageSize * (currentPage - 1))
+        .limit(pageSize);
+    }
+    console.log(`[${new Date().toISOString()}] ${req.method} /api/entries requested`);
+    entryQuery
+    .then(documents => {
+        fetchedEntries = documents;
+        return Entry.countDocuments();
+    })
+    .then(count => {
+        res.status(200).json({
+            message: "Entries fetched successfully!",
+            entries: fetchedEntries,
+            maxEntries: count
+        });
+    });
 });
 
 router.get("/:id", (req, res, next) => {

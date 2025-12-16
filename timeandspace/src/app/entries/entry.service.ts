@@ -9,28 +9,34 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class EntryService {
   private entries: Entry[] = [];
-  private entriesUpdated = new Subject<Entry[]>(); 
+  private entriesUpdated = new Subject<{ entry: Entry[], entryCount: number }>(); 
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getEntries() {
+  getEntries(entriesPerPage: number, currentPage: number) {
+    const queryParams = `?pagesize=${entriesPerPage}&page=${currentPage}`;
     this.http
-      .get<{ message: string; entries: any }>(
-        "http://localhost:3000/api/entries"
+      .get<{ message: string; entries: any, maxEntries: number}>(
+        "http://localhost:3000/api/entries" + queryParams
       )
-      .pipe(map((entryData) => {
-        return entryData.entries.map((entry: any) => {
+      .pipe(
+        map((entryData) => {
+        return { entries: entryData.entries.map((entry: any) => {
           return {
-            id: entry._id,
             title: entry.title,
             content: entry.content,
+            id: entry._id,
             imagePath: entry.imagePath
           };
-        });
-      }))
-        .subscribe((transformedEntries) => {
-          this.entries = transformedEntries;
-          this.entriesUpdated.next([...this.entries]);
+        }), maxEntries: entryData.maxEntries
+      }}
+    ))
+        .subscribe((transformedEntryData) => {
+          this.entries = transformedEntryData.entries;
+          this.entriesUpdated.next({            
+            entry: [...this.entries],
+            entryCount: transformedEntryData.maxEntries
+          });
         });
   }
 
@@ -55,60 +61,42 @@ addEntry(title: string, content: string, image: File | string) {
   }
 
   this.http
-    .post<{ message: string; entry: Entry }>('http://localhost:3000/api/entries', entryData)
+    .post<{ message: string; entry: Entry }>(
+      'http://localhost:3000/api/entries', 
+      entryData
+    )
     .subscribe(responseData => {
-      const entry: Entry = {
-        id: responseData.entry.id,
-        title: title,
-        content: content,
-        imagePath: responseData.entry.imagePath
-      };
-      this.entries.push(entry);
-      this.entriesUpdated.next([...this.entries]);
       this.router.navigate(['/']);
     });
 }
 
 updateEntry(id: string, title: string, content: string, image: File | string) {
   let entryData: Entry | FormData;
-  if (typeof image === 'object') {
+  if (image instanceof File) {
     entryData = new FormData();
     entryData.append("id", id);
     entryData.append("title", title);
     entryData.append("content", content);
-    entryData.append("image", image, title);
+    entryData.append("image", image, image.name);
   } else {
     entryData = {
       id: id,
       title: title,
       content: content,
-      imagePath: image
+      imagePath: image as string   // existing path
     };
   }
+
   this.http
     .put('http://localhost:3000/api/entries/' + id, entryData)
-      .subscribe(response => {
-        const updatedEntries = [...this.entries];
-        const oldEntryIndex = updatedEntries.findIndex(e => e.id === id);
-        const entry: Entry = {
-          id: id,
-          title: title,
-          content: content,
-          imagePath: ""
-        };
-        updatedEntries[oldEntryIndex] = entry;
-        this.entries = updatedEntries;
-        this.entriesUpdated.next([...this.entries]);
-        this.router.navigate(['/']);
+    .subscribe(response => {
+      // your success code...
+      this.router.navigate(['/']);
     });
 }
 
   deleteEntry(entryId: string) {
-    this.http.delete('http://localhost:3000/api/entries/' + entryId)
-      .subscribe(() => {
-        const updatedEntries = this.entries.filter(entry => entry.id !== entryId);
-        this.entries = updatedEntries;
-        this.entriesUpdated.next([...this.entries]);
-      });
+    return this
+    .http.delete('http://localhost:3000/api/entries/' + entryId);
   }
 }
