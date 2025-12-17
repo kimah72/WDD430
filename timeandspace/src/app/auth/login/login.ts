@@ -18,6 +18,7 @@ export class Login {
         if (form.invalid) {
             return;
     }
-        this.authService.login(form.value.email, form.value.password);
+    this.isLoading = true;
+    this.authService.login(form.value.email, form.value.password);
     }
 }

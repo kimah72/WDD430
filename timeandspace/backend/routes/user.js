@@ -7,7 +7,6 @@ const User = require("../models/user");
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
-    console.log("Signup request received:", req.body); 
     bcrypt.hash(req.body.password, 8, )
     .then(hash => {
         const user = new User({
@@ -28,12 +27,15 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-    User.find({ email: req.body.email }).then(user => {
+    let fetchedUser;
+    User.findOne({ email: req.body.email })
+    .then(user => {
         if (!user) {
             return res.status(401).json({ 
                 message: "Auth failed" 
             });
         }
+        fetchedUser = user;
         return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
@@ -43,15 +45,18 @@ router.post("/login", (req, res, next) => {
             });
         }
         const token = jwt.sign(
-            { email: user.email, userId: user._id }, 
+            { email: fetchedUser.email, userId: fetchedUser._id }, 
             "secret_this_should_be_longer", 
             { expiresIn: "1h" }
         );
         res.status(200).json({ 
-            token: token 
+            token: token,
+            expiresIn: 3600,
+            userId: fetchedUser._id
         });
     })
     .catch(err => {
+        console.error("Login error:", err);
         return res.status(401).json({ 
             message: "Auth failed" 
         });

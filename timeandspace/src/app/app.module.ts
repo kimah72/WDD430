@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import { MatFormFieldModule } from '@angular/material/form-field'; // I have this and the original doesn't
@@ -22,6 +22,7 @@ import { EntryList } from './entries/entry-list/entry-list';
 import { AppRoutingModule } from './app-routing.module';
 import { Login } from './auth/login/login';
 import { Signup } from './auth/signup/signup';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 
 @NgModule({
@@ -52,7 +53,9 @@ import { Signup } from './auth/signup/signup';
     CommonModule,
   
   ],
-  providers: [provideBrowserGlobalErrorListeners()],
+  providers: [provideBrowserGlobalErrorListeners(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [App],
 })
 export class AppModule {}

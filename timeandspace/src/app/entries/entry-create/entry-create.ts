@@ -53,7 +53,8 @@ constructor(
             id: entryData._id, 
             title: entryData.title, 
             content: entryData.content,
-            imagePath: entryData.imagePath
+            imagePath: entryData.imagePath,
+            creator: ""
           };
             this.form.setValue({
             title: this.entry.title,

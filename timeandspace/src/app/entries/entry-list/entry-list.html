@@ -11,7 +11,7 @@
         class="preview-img">
     </div>
     <p>{{ entry.content }}</p>
-      <mat-action-row>
+      <mat-action-row *ngIf="userIsAuthenticated && userId == entry.creator">
         <a mat-button color="primary" class="glitch-hover" [routerLink]="['/edit', entry.id]" data-text="EDIT">EDIT</a>
         <button mat-button color="warn" (click)="onDelete(entry.id)">DELETE</button>
       </mat-action-row>
