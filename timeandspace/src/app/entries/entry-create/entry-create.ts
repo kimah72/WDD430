@@ -1,10 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Subscription } from "rxjs";
 
 import { EntryService } from "../entry.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Entry } from "../entry.model";
 import { mimeType } from "./mime-type.validator";
+import { AuthService } from "../../auth/auth.service";
+
 
 @Component({
   selector: "app-entry-create",
@@ -12,7 +15,7 @@ import { mimeType } from "./mime-type.validator";
   templateUrl: "./entry-create.html",
   styleUrls: ["./entry-create.css"],
 })
-export class EntryCreate implements OnInit {
+export class EntryCreate implements OnInit, OnDestroy {
   enteredTitle = "";
   enteredContent = "";
   entry: Entry | undefined;
@@ -21,14 +24,21 @@ export class EntryCreate implements OnInit {
   imagePreview!: string;
   private mode = "create";
   private entryId!: string;
+  private authStatusSub!: Subscription;
   
 
 constructor(
   public entriesService: EntryService, public route: ActivatedRoute,
-  private cd: ChangeDetectorRef
+  private cd: ChangeDetectorRef,
+  private authService: AuthService
 ) {}
 
   ngOnInit() {
+    this.authStatusSub = this.authService
+    .getAuthStatusListener()
+    .subscribe(authStatus => {
+        this.isLoading = false;
+    });
     this.form = new FormGroup({
       // added a reactive form
       title: new FormControl(null, { validators: [Validators.required, Validators.minLength(3)] }),
@@ -104,5 +114,9 @@ constructor(
       );
     }
     this.form.reset();
+  }
+
+  ngOnDestroy(): void {
+      this.authStatusSub.unsubscribe();
   }
 }

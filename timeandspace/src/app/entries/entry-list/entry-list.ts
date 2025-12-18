@@ -18,7 +18,7 @@ export class EntryList implements OnInit, OnDestroy {
   totalEntries = 0;
   entryPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [1, 2, 5, 10];
+  pageSizeOptions = [1, 2, 5, 10, 25];
   userIsAuthenticated = false;
   userId: string = '';
   private entrySub!: Subscription;
@@ -62,6 +62,8 @@ export class EntryList implements OnInit, OnDestroy {
     this.isLoading = true;
     this.entryService.deleteEntry(entryId).subscribe(() => {
       this.entryService.getEntries(this.entryPerPage, this.currentPage);
+    }, () => {
+      this.isLoading = false;
     });
   }
 

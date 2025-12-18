@@ -1,50 +1,51 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Subject } from "rxjs";
+import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
 
-import { Entry } from './entry.model';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { environment } from "../../environments/environment";
+import { Entry } from "./entry.model";
 
-@Injectable({ providedIn: 'root' })
+const BACKEND_URL = environment.apiUrl + "/entries";
+
+@Injectable({ providedIn: "root" })
 export class EntryService {
   private entries: Entry[] = [];
   private entriesUpdated = new Subject<{ entry: Entry[], entryCount: number }>(); 
 
   constructor(
     private http: HttpClient, 
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   getEntries(entriesPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${entriesPerPage}&page=${currentPage}`;
     this.http
       .get<{ message: string; entries: any, maxEntries: number}>(
-        "http://localhost:3000/api/entries" + queryParams
+        BACKEND_URL + queryParams
       )
       .pipe(
-        map((entryData) => {
-        return { entries: entryData.entries.map((entry: any) => {
-          return {
-            title: entry.title,
-            content: entry.content,
-            id: entry._id,
-            imagePath: entry.imagePath,
-            creator: entry.creator
-          };
-        }), maxEntries: entryData.maxEntries
-      }}
-    ))
-        .subscribe((transformedEntryData) => {
-          console.log(transformedEntryData);
-          this.entries = transformedEntryData.entries;
-          this.entriesUpdated.next({            
-            entry: [...this.entries],
-            entryCount: transformedEntryData.maxEntries
-          });
+          map((entryData) => {
+          return { entries: entryData.entries.map((entry: any) => {
+            return {
+              title: entry.title,
+              content: entry.content,
+              id: entry._id,
+              imagePath: entry.imagePath,
+              creator: entry.creator
+            };
+          }), maxEntries: entryData.maxEntries
+        }}
+      ))
+      .subscribe((transformedEntryData) => {
+        console.log(transformedEntryData);
+        this.entries = transformedEntryData.entries;
+        this.entriesUpdated.next({            
+          entry: [...this.entries],
+          entryCount: transformedEntryData.maxEntries
         });
+      });
   }
 
   getEntryUpdateListener() {
@@ -58,8 +59,7 @@ export class EntryService {
       content: string, 
       imagePath: string,
       creator: string
-    }>("http://localhost:3000/api/entries/" + id
-    );
+    }>(BACKEND_URL + id);
   }
 
 addEntry(title: string, content: string, image: File | null) {
@@ -69,22 +69,13 @@ addEntry(title: string, content: string, image: File | null) {
   if (image) {
     entryData.append("image", image, image.name);
   }
-
-  this.http.post<{ message: string; entry: Entry }>('http://localhost:3000/api/entries', entryData)
+  this.http
+  .post<{ message: string; entry: Entry }>(
+    BACKEND_URL, 
+    entryData
+  )
     .subscribe(responseData => {
-      const newEntry: Entry = {
-        id: responseData.entry.id,
-        title: title,
-        content: content,
-        imagePath: responseData.entry.imagePath,
-        creator: this.authService.getUserId() || ''
-      };
-      this.entries.push(newEntry);
-      this.entriesUpdated.next({
-        entry: [...this.entries],
-        entryCount: this.entries.length
-      });
-      this.router.navigate(['/']);
+      this.router.navigate(["/"]);
     });
 }
 
@@ -102,18 +93,17 @@ updateEntry(id: string, title: string, content: string, image: File | string) {
       title: title,
       content: content,
       imagePath: image as string,
-      creator: this.authService.getUserId() || ''
+      creator: ""
     };
   }
-
-  this.http.put('http://localhost:3000/api/entries/' + id, entryData)
+  this.http
+  .put(BACKEND_URL + id, entryData)
     .subscribe(() => {
-      this.router.navigate(['/']);
+      this.router.navigate(["/"]);
     });
 }
 
   deleteEntry(entryId: string) {
-    return this
-    .http.delete('http://localhost:3000/api/entries/' + entryId);
+    return this.http.delete(BACKEND_URL + entryId);
   }
 }

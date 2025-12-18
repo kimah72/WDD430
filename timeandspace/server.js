@@ -1,17 +1,7 @@
 require('dotenv').config();
-const mongoose = require("mongoose");
 const app = require("./backend/app");
 const debug = require("debug")("node-angular");
 const http = require("http");
-
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_USER}:${ process.env.MONGO_PASSWORD }@cluster0.huzsxja.mongodb.net/${ process.env.MONGO_DB }`)
-    .then(() => {
-      console.log("Mongoose has connected to database!")
-    })
-    .catch(() => {
-      console.log("Mongoose connection failed!");
-    });
 
 const normalizePort = val => {
   var port = parseInt(val, 10);

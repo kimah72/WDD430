@@ -1,14 +1,26 @@
-const path = require('path');
-const express = require('express');
-const bodyParser = require('body-parser');
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-const entriesRoutes = require('./routes/entries');
-const userRoutes = require('./routes/user');
-
-// added mongoose connection in server.js instead of app.js
+const entriesRoutes = require("./routes/entries");
+const userRoutes = require("./routes/user");
 
 // a big chain of middleware, like a funnel which we send express and every part can do something with the request.
 const app = express();
+
+mongoose
+  .connect(
+    "mongodb+srv://kimah:" + 
+    process.env.MONGO_PASSWORD + 
+    "@cluster0.huzsxja.mongodb.net/timeandspace"
+  )
+  .then(() => {
+    console.log("Mongoose has connected to database!")
+  })
+  .catch(() => {
+    console.log("Mongoose connection failed!");
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
