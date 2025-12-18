@@ -31,10 +31,11 @@ body {
   color-scheme: dark;
   background: 
     linear-gradient(rgba(13, 0, 26, 0.8), rgba(13, 0, 26, 0.8)),
-    url('https://images.stockcake.com/public/d/0/2/d0254079-6ad6-49cb-920b-31cfeaaea875_large/neon-rain-city-stockcake.jpg') center/cover fixed;  // rainy cyberpunk city
+    url('https://images.stockcake.com/public/d/0/2/d0254079-6ad6-49cb-920b-31cfeaaea875_large/neon-rain-city-stockcake.jpg') center/cover fixed;
   margin: 0;
   min-height: 100vh;
   font-family: "Rajdhani", sans-serif !important;
+  letter-spacing: 1px;
 }
 
 // Holographic glass cards with scan lines
@@ -45,6 +46,13 @@ mat-card {
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  border-radius: 16px !important;
+  transition: all 0.4s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
 }
 
 // Scan line overlay (classic cyberpunk effect)
@@ -115,15 +123,15 @@ button[mat-button]:hover {
   }
   
   &::before {
-    color: #00e5ffff;  // cyan layer
+    color: #00e5ffff;
     left: 2px;
-    text-shadow: -2px 0 #ff00ff;  // magenta shadow
+    text-shadow: -2px 0 #ff00ff;
     clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
     transform: translate(-2px, -2px);
   }
   
   &::after {
-    color: #ff00ff;    // magenta layer
+    color: #ff00ff;
     left: -2px;
     text-shadow: 2px 0 #00e5ffff;
     clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
@@ -180,7 +188,7 @@ body::after {
       transparent 75%,
       transparent 100%
     );
-  background-size: 100% 100px, 100% 150px;  // two layers for depth
+  background-size: 100% 100px, 100% 150px;
   background-position: 0 0, 0 0;
   animation: falling-rain 20s linear infinite;
   opacity: 0.5;
@@ -191,11 +199,6 @@ body::after {
 @keyframes falling-rain {
   0% { background-position: 0 0, 0 0; }
   100% { background-position: 0 100px, 0 150px; }
-}
-
-@keyframes digital-rain {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 60px; }
 }
 
 /* NEON GLOW ON ACTIVE ENTRY */
@@ -211,7 +214,7 @@ body::after {
   background: linear-gradient(to right, transparent, rgba(0, 229, 255, 0.1)) !important;
 }
 
-/* CUSTOM NEON CURSOR */
+/* SUBTLE NEON DOT CURSOR — minimal glow */
 body, * {
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="none" stroke="%2300e5ff" stroke-width="4"/><circle cx="16" cy="16" r="12" fill="none" stroke="%2300e5ff" stroke-width="2" opacity="0.6"/></svg>') 16 16, auto !important;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="%2300e5ff" opacity="0.8"/></svg>') 10 10, auto !important;
 }
