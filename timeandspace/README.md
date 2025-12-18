@@ -43,14 +43,14 @@ Coming soon after deployment!
    git clone https://github.com/your-username/timeandspace.git
    cd timeandspace
 
-2.  Backend:bash
-
+2.  Backend:
+    ```bash
     cd backend
     npm install
     npm run start:server
 
-3. Frontend:bash
-
+3. Frontend:
+    ```bash
     cd ..
     npm install
     ng serve
