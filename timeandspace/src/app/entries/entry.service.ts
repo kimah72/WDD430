@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { Entry } from "./entry.model";
 
-const BACKEND_URL = environment.apiUrl + "/entries";
+const BACKEND_URL = environment.apiUrl + "/entries/";
 
 @Injectable({ providedIn: "root" })
 export class EntryService {
