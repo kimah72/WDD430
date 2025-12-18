@@ -1,59 +1,44 @@
-# Timeandspace
+# Time & Space – A Personal Cyberpunk Blog
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.1.
+![Cyberpunk Preview](https://via.placeholder.com/1200x600/0d001a/00ffff?text=Time+and+Space+Cyberpunk+Blog)  
+*(Screenshot coming soon — neon rain, glitch effects, holographic cards)*
 
-## Development server
+A full-stack **MEAN** (MongoDB, Express, Angular, Node.js) personal blog application built while following Maximilian Schwarzmüller's classic Angular & Node.js course — but taken to the next level with a **custom cyberpunk aesthetic**.
 
-To start a local development server, run:
+This isn't just a tutorial project.  
+It's a **digital sanctuary** — a neon-lit space for thoughts, experiments, and reflections on the journey of learning full-stack development.
 
-```bash
-ng serve
-```
+## Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Full CRUD operations (Create, Read, Update, Delete entries)
+- Image upload with preview and validation
+- Responsive pagination
+- User authentication (signup/login with JWT)
+- Protected routes (only owners can edit/delete)
+- Persistent login (remembers you after refresh)
+- Custom **cyberpunk theme**:
+  - Neon cyan + magenta glows
+  - Glitch text on hover
+  - Falling digital rain background
+  - Holographic glass cards
+  - Pulsing buttons
+  - Rajdhani + Orbitron fonts
 
-## Code scaffolding
+## Tech Stack
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Frontend**: Angular 21 + Angular Material
+- **Backend**: Node.js + Express
+- **Database**: MongoDB (via MongoDB Atlas)
+- **Styling**: SCSS with heavy custom overrides for the cyberpunk look
+- **Authentication**: JWT tokens
 
-```bash
-ng generate component component-name
-```
+## Live Demo
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Coming soon after deployment!
 
-```bash
-ng generate --help
-```
+## Setup & Running Locally
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/timeandspace.git
+   cd timeandspace
