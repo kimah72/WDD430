@@ -42,3 +42,36 @@ Coming soon after deployment!
    ```bash
    git clone https://github.com/your-username/timeandspace.git
    cd timeandspace
+
+2.  Backend:bash
+
+cd backend
+npm install
+npm run start:server
+
+3. Frontend:bash
+
+cd ..
+npm install
+ng serve
+
+Open http://localhost:4200
+
+Note: You'll need a MongoDB Atlas connection string in backend/.env
+
+
+Why This Project Matters
+
+This started as a course exercise — but became a creative outlet.
+
+Every bug fixed, every glow added, every late-night debug session is documented in the entries themselves.
+
+It's not just code.
+
+It's a story.
+
+Built with passion in December 2025 by Kimah.
+
+"In the neon rain, we code."
+— Me, probably
+
