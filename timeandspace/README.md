@@ -6,7 +6,7 @@
 A full-stack **MEAN** (MongoDB, Express, Angular, Node.js) personal blog application built while following Maximilian Schwarzmüller's classic Angular & Node.js course — but taken to the next level with a **custom cyberpunk aesthetic**.
 
 This isn't just a tutorial project.  
-It's a **digital sanctuary** — a neon-lit space for thoughts, experiments, and reflections on the journey of learning full-stack development.
+It's a **digital sanctuary** — a neon-lit space for thoughts, experiments, and reflections on the journey of learning full-stack development and life.
 
 ## Features
 
@@ -64,7 +64,7 @@ Note: You'll need a MongoDB Atlas connection string in backend/.env
 
 This started as a course exercise — but became a creative outlet.
 
-Every bug fixed, every glow added, every late-night debug session is documented in the entries themselves.
+Every bug that is fixed, every glow added, every late-night session is documented in the entries themselves.
 
 It's not just code.
 
@@ -75,5 +75,5 @@ Built with passion in December 2025 by Kimah.
 # Time & Space
 
 *"In the neon rain, we code."*  
-— Kimah, probably
+— Kimah
 
