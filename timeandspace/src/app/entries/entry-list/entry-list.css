@@ -49,3 +49,13 @@ mat-paginator {
   transform: scale(1.05);
   box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
 }
+
+.meta-info > div {
+  margin-bottom: 0.3rem;
+}
+
+.content-text {
+  white-space: pre-line;  /* preserves new lines, collapses extra spaces */
+  word-wrap: break-word;  /* prevents overflow on long words */
+  line-height: 1.6;
+}

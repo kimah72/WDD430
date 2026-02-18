@@ -33,7 +33,9 @@ export class EntryService {
               content: entry.content,
               id: entry._id,
               imagePath: entry.imagePath,
-              creator: entry.creator
+              creator: entry.creator,
+              createdAt: entry.createdAt,
+              updatedAt: entry.updatedAt
             };
           }), maxEntries: entryData.maxEntries
         }}
@@ -58,7 +60,9 @@ export class EntryService {
       title: string, 
       content: string, 
       imagePath: string,
-      creator: string
+      creator: string,
+      createdAt: Date | string,
+      updatedAt: Date | string,
     }>(BACKEND_URL + id);
   }
 

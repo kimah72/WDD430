@@ -51,6 +51,17 @@ export class EntryList implements OnInit, OnDestroy {
     });
   }
 
+  wasEdited(entry: Entry): boolean {
+  if (!entry.createdAt || !entry.updatedAt) return false;
+
+  const created = new Date(entry.createdAt);
+  const updated = new Date(entry.updatedAt);
+
+  // Only show "Edited" if more than ~5 minutes difference
+  const diffMinutes = (updated.getTime() - created.getTime()) / (1000 * 60);
+  return diffMinutes > 5;
+  }
+
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;

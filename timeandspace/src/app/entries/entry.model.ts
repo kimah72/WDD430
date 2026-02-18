@@ -5,4 +5,6 @@ export interface Entry {
   content: string;
   imagePath: string;
   creator: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 } 
